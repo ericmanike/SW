@@ -116,15 +116,7 @@ export default function DonateSupport() {
               </div>
             </div>
 
-            <div className="flex items-center space-x-4 p-4 bg-linear-to-br from-cyan-50 to-blue-50 rounded-xl">
-              <div className="w-12 h-12 bg-cyan-500 rounded-lg flex items-center justify-center">
-                <Calendar className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900">{daysLeft}</p>
-                <p className="text-sm text-gray-600">Days Left</p>
-              </div>
-            </div>
+            
           </div>
         </div>
 
@@ -255,7 +247,7 @@ export default function DonateSupport() {
 
               <button
                 onClick={handleDonationSubmit}
-                className="w-full py-4 bg-linear-to-r from-cyan-500 to-blue-600 text-white rounded-xl font-bold text-lg hover:shadow-xl transition focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 flex items-center justify-center space-x-2"
+                className="cursor-pointer w-full py-4 bg-linear-to-r from-cyan-500 to-blue-600 text-white rounded-xl font-bold text-lg hover:shadow-xl transition focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 flex items-center justify-center space-x-2"
               >
                 <Heart className="w-5 h-5" />
                 <span>Donate ${donationAmount || customAmount || '0'}</span>

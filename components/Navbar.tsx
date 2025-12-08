@@ -13,7 +13,7 @@ function Navbar() {
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-3 cursor-pointer" onClick={() => router.push('/')}>
               <div className="w-12 h-12 bg-linear-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center">
                 <Droplet className="w-7 h-7 text-white" />
               </div>
@@ -31,7 +31,7 @@ function Navbar() {
               <Link href="/contact" className="text-gray-700 hover:text-cyan-600 font-medium transition"><Phone/></Link>
               <button 
                 onClick={() => router.push('/support')}
-                className="px-5 py-2 bg-linear-to-r from-cyan-500 to-blue-600 text-white rounded-lg hover:shadow-lg transition font-medium"
+                className=" cursor-pointer px-5 py-2 bg-linear-to-r from-cyan-500 to-blue-600 text-white rounded-lg hover:shadow-lg transition font-medium"
               >
                 Support Us
               </button>
@@ -76,15 +76,17 @@ function Navbar() {
               >
                 About
               </Link>
+      
               <button 
                 onClick={() => {
                   router.push('/support');
                   setMobileMenuOpen(false);
                 }}
-                className="w-full px-5 py-3 bg-linear-to-r from-cyan-500 to-blue-600 text-white rounded-lg hover:shadow-lg transition font-medium"
+                className="cursor-pointer w-full px-5 py-3 bg-linear-to-r from-cyan-500 to-blue-600 text-white rounded-lg hover:shadow-lg transition font-medium"
               >
                 Support Us
               </button>
+              
             </nav>
           </div>
         )}
