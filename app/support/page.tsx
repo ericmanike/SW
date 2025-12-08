@@ -1,6 +1,15 @@
 'use client'
+import { useToast } from '@/components/toastProvider';
+
+declare global {
+  interface Window {
+    PaystackPop: any;
+  }
+}
+
 import React, { useState } from 'react';
-import { Heart, TrendingUp, User, Mail, DollarSign, Phone, CheckCircle, Users, Calendar } from 'lucide-react';
+import { Heart, TrendingUp, User, Mail, DollarSign, Phone, CheckCircle, Users } from 'lucide-react';
+import Script from 'next/script';
 
 export default function DonateSupport() {
   const [donationAmount, setDonationAmount] = useState('');
@@ -12,14 +21,15 @@ export default function DonateSupport() {
     message: ''
   });
   const [showSuccess, setShowSuccess] = useState(false);
+  const { showToast } = useToast();
 
-  const amountRaised = 8750;
-  const targetAmount = 20000;
+  const amountRaised = 0;
+  const targetAmount = 10000;
   const progressPercentage = (amountRaised / targetAmount) * 100;
-  const donors = 143;
-  const daysLeft = 45;
+  const donors = 0;
+  
 
-  const predefinedAmounts = ['25', '50', '100', '250', '500', '1000'];
+  const predefinedAmounts = ['5', '10', '50', '100', '250', '1000'];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -30,20 +40,61 @@ export default function DonateSupport() {
 
   const handleDonationSubmit = () => {
     const finalAmount = donationAmount || customAmount;
-    
     if (!finalAmount || !formData.fullName || !formData.email) {
-      alert('Please fill in all required fields');
+    
       return;
     }
 
-    setShowSuccess(true);
+    
     setTimeout(() => {
-      setShowSuccess(false);
       setDonationAmount('');
       setCustomAmount('');
       setFormData({ fullName: '', email: '', phone: '', message: '' });
     }, 3000);
   };
+
+
+   const handleInlinePayment = () => {
+    const { email } = formData;
+    const amount = donationAmount || customAmount;
+    if (!email || !amount) {
+      showToast('Please fill in all fields', 'error');
+      return;
+    }
+
+    const handler = window.PaystackPop.setup({
+      key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
+      email: email,
+      amount: parseFloat(amount) * 100,
+      currency: 'GHS', // or 'NGN', 'USD', 'ZAR'
+      ref: 'PS_' + Math.floor((Math.random() * 1000000000) + 1),
+      onClose: function() {
+        showToast('Payment window closed', 'info');
+      },
+      callback: function(response: any) {
+        
+        
+      }
+    });
+
+    handler.openIframe();
+  };
+
+  // const verifyPayment = async (reference:any) => {
+  //   try {
+  //     const response = await fetch(`/api/paystack/verify?reference=${reference}`);
+  //     const data = await response.json();
+
+  //     if (data.status && data.data.status === 'success') {
+  //       showToast('Payment successful!', 'success');
+        
+  //     } else {
+  //       showToast('Payment verification failed', 'error');
+  //     }
+  //   } catch (error) {
+  //     console.error('Verification error:', error);
+  //   }
+  // };
 
   return (
     <div className=" bg-linear-to-br from-gray-50 via-cyan-50 to-blue-50 min-h-screen">
@@ -207,7 +258,7 @@ export default function DonateSupport() {
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      placeholder="john@example.com"
+                      placeholder="john@gmail.com"
                       className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition"
                     />
                   </div>
@@ -245,8 +296,16 @@ export default function DonateSupport() {
                 </div>
               </div>
 
+             <Script
+  src="https://js.paystack.co/v1/inline.js"
+  strategy="afterInteractive"
+/>
               <button
-                onClick={handleDonationSubmit}
+                onClick={() => {
+                  handleInlinePayment();
+                  handleDonationSubmit();
+                  
+                }}
                 className="cursor-pointer w-full py-4 bg-linear-to-r from-cyan-500 to-blue-600 text-white rounded-xl font-bold text-lg hover:shadow-xl transition focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 flex items-center justify-center space-x-2"
               >
                 <Heart className="w-5 h-5" />
@@ -282,25 +341,7 @@ export default function DonateSupport() {
         </div>
       </section>
 
-      {/* Success Modal */}
-      {showSuccess && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full animate-[scaleIn_0.3s_ease-out]">
-            <div className="text-center">
-              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="w-12 h-12 text-green-600" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">Thank You!</h3>
-              <p className="text-gray-600 mb-6">
-                Your generous donation of ${donationAmount || customAmount} will help bring clean water to Northern Ghana.
-              </p>
-              <p className="text-sm text-gray-500">
-                A confirmation email has been sent to {formData.email}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
+     
 
       <style jsx>{`
         @keyframes scaleIn {

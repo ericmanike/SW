@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from 'react';
 import {  MapPin, Phone, Mail, Send, CheckCircle } from 'lucide-react';
+import { useToast } from '@/components/toastProvider';
 
 export default function AboutPage() {
   const [contactForm, setContactForm] = useState({
@@ -10,6 +11,7 @@ export default function AboutPage() {
     message: ''
   });
   const [showSuccess, setShowSuccess] = useState(false);
+  const { showToast } = useToast();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setContactForm({
@@ -20,7 +22,7 @@ export default function AboutPage() {
 
   const handleSubmit = () => {
     if (!contactForm.name || !contactForm.email || !contactForm.message) {
-      alert('Please fill in all required fields');
+      showToast('Please fill in all required fields', 'error');
       return;
     }
 
@@ -38,7 +40,7 @@ export default function AboutPage() {
     <div className="bg-gray-50 min-h-screen">
     
       {/* Contact Form Section */}
-      <section className="py-20 bg-linear-to-br from-gray-50 via-cyan-50 to-blue-50">
+      <section className="mt-10 py-20 bg-linear-to-br from-gray-50 via-cyan-50 to-blue-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Get In Touch</h2>
@@ -68,7 +70,7 @@ export default function AboutPage() {
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900 mb-1">Phone</h4>
-                      <p className="text-gray-600">+233 123 456 789<br />+233 987 654 321</p>
+                      <p className="text-gray-600">0543442518</p>
                     </div>
                   </div>
 
@@ -78,7 +80,7 @@ export default function AboutPage() {
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900 mb-1">Email</h4>
-                      <p className="text-gray-600">info@savannahwater.org<br />support@savannahwater.org</p>
+                      <p className="text-gray-600">savannahwater@gmail.com</p>
                     </div>
                   </div>
                 </div>
@@ -166,7 +168,7 @@ export default function AboutPage() {
 
                 <button
                   onClick={handleSubmit}
-                  className="w-full py-4 bg-linear-to-r from-cyan-500 to-blue-600 text-white rounded-xl font-bold text-lg hover:shadow-xl transition focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 flex items-center justify-center space-x-2"
+                  className="cursor-pointer w-full py-4 bg-linear-to-r from-cyan-500 to-blue-600 text-white rounded-xl font-bold text-lg hover:shadow-xl transition focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 flex items-center justify-center space-x-2"
                 >
                   <Send className="w-5 h-5" />
                   <span>Send Message</span>

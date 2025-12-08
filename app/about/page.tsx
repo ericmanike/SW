@@ -33,25 +33,21 @@ export default function AboutPage() {
 
   const teamMembers = [
     {
-      name: 'Dr. Amina Mensah',
+      name: 'Mr. Eric Manike Haare',
       role: 'Founder & CEO',
       image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80'
     },
     {
-      name: 'Kwame Osei',
+      name: 'Unknown',
       role: 'Operations Director',
       image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80'
     },
     {
-      name: 'Ama Adjei',
+      name: 'Unknown',
       role: 'Community Outreach',
       image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&q=80'
     },
-    {
-      name: 'Kofi Mensah',
-      role: 'Technical Lead',
-      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80'
-    }
+ 
   ];
 
  
@@ -153,7 +149,7 @@ export default function AboutPage() {
             <p className="text-xl text-gray-600">Dedicated professionals working to make a difference</p>
           </div>
 
-          <div className="grid md:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-3 border-2 gap-6">
             {teamMembers.map((member, index) => (
               <div key={index} className="bg-linear-to-br from-cyan-50 to-blue-50 rounded-xl p-4 text-center hover:shadow-xl transition">
                 <img 
@@ -170,26 +166,6 @@ export default function AboutPage() {
       </section>
 
       
-
-      {/* Success Modal */}
-      {showSuccess && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full animate-[scaleIn_0.3s_ease-out]">
-            <div className="text-center">
-              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="w-12 h-12 text-green-600" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">Message Sent!</h3>
-              <p className="text-gray-600 mb-6">
-                Thank you for reaching out. We&apos;ll get back to you as soon as possible.
-              </p>
-              <p className="text-sm text-gray-500">
-                A confirmation has been sent to {contactForm.email}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
 
       <style jsx>{`
         @keyframes scaleIn {
