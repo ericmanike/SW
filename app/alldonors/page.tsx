@@ -1,12 +1,29 @@
 'use client';
 
 
-import  { useState, useMemo } from 'react';
+import  { useState, useMemo , useEffect} from 'react';
 import { Search, Heart, TrendingUp, Users, DollarSign } from 'lucide-react';
 
 const DonorsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('amount-desc');
+
+  useEffect(() => {
+    async function fetchDonors() {
+      try{
+
+
+        const response = await fetch('/api/paymentverify/balance');
+        const data = await response.json();
+        console.log('Fetched donors data:', data);
+      } catch (error) {
+        console.error('Error fetching donors:', error);
+      }
+    
+    }
+    fetchDonors();
+  },[])
+
 
   // Sample donor data
   const donors = [

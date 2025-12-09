@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from 'react';
 import {  Target, Users, Award, MapPin, Phone, Mail, Send, CheckCircle, Heart, Shield, Lightbulb } from 'lucide-react';
+import type { Metadata } from "next";
 
 export default function AboutPage() {
   const [contactForm, setContactForm] = useState({
