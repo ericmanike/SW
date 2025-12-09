@@ -10,10 +10,10 @@ export default function SavannahWater() {
   const router = useRouter();
 
   const images = [
-    'https://images.unsplash.com/photo-1541480601022-2308c0f02487?w=800&q=80',
-    'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80',
-    'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=800&q=80',
-    'https://images.unsplash.com/photo-1594398901394-4e34939a4fd0?w=800&q=80'
+    '/img1.png',
+    '/img2.png',
+    '/img3.png',
+    '/img4.png'
   ];
 
   const impactItems = [
@@ -74,7 +74,7 @@ export default function SavannahWater() {
                 </span>
               </h2>
               <p className="text-lg lg:text-xl text-gray-600 leading-relaxed max-w-xl">
-                Establishing pure water manufacturing companies to provide sustainable access to clean, safe drinking water across Northern Ghana's communities.
+                Establishing pure water manufacturing plants to provide sustainable access to clean, safe drinking water across Northern Ghana's communities.
               </p>
             </div>
             
@@ -98,7 +98,7 @@ export default function SavannahWater() {
                 <p className="text-sm text-gray-600 mt-1">Lives Impacted</p>
               </div>
               <div>
-                <p className="text-3xl font-bold text-cyan-600">12</p>
+                <p className="text-3xl font-bold text-cyan-600">10</p>
                 <p className="text-sm text-gray-600 mt-1">Communities</p>
               </div>
               <div>

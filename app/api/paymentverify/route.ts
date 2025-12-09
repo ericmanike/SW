@@ -1,23 +1,29 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
-import payment from "@/models/Payment";
+import Payment from "@/models/Payment";
 
 export async function POST(req: Request) {
   try {
     await dbConnect();
-    const { userId, reference } = await req.json();
 
-    if (!userId || !reference) {
-      return NextResponse.json({ error: "Missing userId or reference" }, { status: 400 });
+    const { reference, name, email, message } = await req.json();
+
+    if (!reference) {
+      return NextResponse.json({ error: "Missing reference" }, { status: 400 });
     }
 
-    // Verify payment with Paystack
     const secretKey = process.env.PAYSTACK_SECRET_KEY;
-    const verify = await fetch(`https://api.paystack.co/transaction/verify/${reference}`, {
-      headers: {
-        Authorization: `Bearer ${secretKey}`,
-      },
-    });
+    if (!secretKey) {
+      return NextResponse.json({ error: "Missing Paystack Secret Key" }, { status: 500 });
+    }
+
+    // --- Verify payment from Paystack ---
+    const verify = await fetch(
+      `https://api.paystack.co/transaction/verify/${reference}`,
+      {
+        headers: { Authorization: `Bearer ${secretKey}` },
+      }
+    );
 
     const data = await verify.json();
 
@@ -25,25 +31,34 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Payment verification failed" }, { status: 400 });
     }
 
-    // Extract safe info
-    const amount = data.data.amount / 100; // Paystack sends in kobo
+    // Extract Paystack details
+    const amount = data.data.amount / 100; // convert from kobo
+    const paymentMethod = data.data.authorization?.channel || "unknown";
     const cardLast4 = data.data.authorization?.last4 || null;
-    const paymentMethod = data.data.authorization?.channel || "card";
+    const currency = data.data.currency;
 
-    // Store in MongoDB
-    const Newpayment = await payment.create({
-      userId,
+    // --- Save to MongoDB ---
+    const newPayment = await Payment.create({
       reference,
       amount,
       status: "success",
-      currency: data.data.currency,
+      currency,
       paymentMethod,
       cardLast4,
+      name,
+      email,
+      message,
     });
 
-    return NextResponse.json({ success: true, payment });
+    return NextResponse.json(
+      { success: true, payment: newPayment },
+      { status: 200 }
+    );
   } catch (error: any) {
-    console.error(error);
-    return NextResponse.json({ error: error.message || "Server error" }, { status: 500 });
+    console.error("PAYSTACK VERIFY ERROR:", error);
+    return NextResponse.json(
+      { error: error.message || "Server error" },
+      { status: 500 }
+    );
   }
 }

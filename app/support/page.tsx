@@ -45,13 +45,29 @@ export default function DonateSupport() {
       return;
     }
 
+  
+  };
+
+
+
+  const sendMail = async (to: string, subject: string, message: string) => {
+    try {
+      const response = await fetch('/api/paymentverify/sendMail', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ to, subject, message })
+      });
+      const data = await response.json();
     
-    setTimeout(() => {
       setDonationAmount('');
       setCustomAmount('');
       setFormData({ fullName: '', email: '', phone: '', message: '' });
-    }, 3000);
-  };
+    
+      console.log('Email sent response:', data);
+    } catch (error) {
+      console.error('Error sending email:', error);
+    }
+  }
 
 
    const handleInlinePayment = () => {
@@ -72,7 +88,7 @@ export default function DonateSupport() {
         showToast('Payment window closed', 'info');
       },
       callback: function(response: any) {
-        
+        verifyPayment(response.reference);      
         
       }
     });
@@ -80,21 +96,36 @@ export default function DonateSupport() {
     handler.openIframe();
   };
 
-  // const verifyPayment = async (reference:any) => {
-  //   try {
-  //     const response = await fetch(`/api/paystack/verify?reference=${reference}`);
-  //     const data = await response.json();
+  const verifyPayment = async (reference:any) => {
+    try {
+      const response = await fetch(`/api/paymentverify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reference,  
+          name: formData.fullName,
+           email: formData.email,
+            message: formData.message })
+      });
+      const data = await response.json();
+          console.log('Verification response data:', data);
+      if (data.success) {
+         showToast('Payment  successful!', 'success');
+          sendMail( formData.email,
+            'Thank you for your donation!',
+            `Dear ${formData.fullName},<br/><br/>Thank you for your generous donation of $${donationAmount || customAmount}. 
+            Your support helps us provide clean water to communities 
+            in need.<br/><br/>Best regards,<br/>Savannah Water Team`);  
 
-  //     if (data.status && data.data.status === 'success') {
-  //       showToast('Payment successful!', 'success');
+
         
-  //     } else {
-  //       showToast('Payment verification failed', 'error');
-  //     }
-  //   } catch (error) {
-  //     console.error('Verification error:', error);
-  //   }
-  // };
+      } else {
+        showToast('Payment verification failed', 'error');
+     
+      }
+    } catch (error) {
+      console.error('Verification error:', error);
+    }
+  };
 
   return (
     <div className=" bg-linear-to-br from-gray-50 via-cyan-50 to-blue-50 min-h-screen">
@@ -264,22 +295,7 @@ export default function DonateSupport() {
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Phone Number
-                  </label>
-                  <div className="relative">
-                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      placeholder="+233 123 456 789"
-                      className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition"
-                    />
-                  </div>
-                </div>
+               
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
