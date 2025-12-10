@@ -4,77 +4,95 @@
 import  { useState, useMemo , useEffect} from 'react';
 import { Search, Heart, TrendingUp, Users, DollarSign } from 'lucide-react';
 
+
+export interface IPayment {
+  _id: string; 
+  id: string; 
+  date?: string;
+  reference: string;
+  amount: number;
+  status?: "success" | "failed" | "pending";
+  currency?: string;
+  paymentMethod?: string;
+  cardLast4?: string;
+  name?: string;
+  email?: string;
+  message?: string;
+  createdAt?: string; // timestamps are usually strings when sent as JSON
+  updatedAt?: string;
+}
+
+
+
+
+
+
 const DonorsPage = () => {
+
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('amount-desc');
+  const [donors, setDonors] = useState<IPayment[]>([]);
 
   useEffect(() => {
     async function fetchDonors() {
-      try{
-
-
+      try {
         const response = await fetch('/api/paymentverify/balance');
-        const data = await response.json();
+        const data: { donations: IPayment[]; totalDonations: number } = await response.json();
         console.log('Fetched donors data:', data);
+        // Transform the data to match expected format
+        const transformedDonors = (data.donations || []).map(donation => ({
+          ...donation,
+          id: donation._id,
+          amount: Number(donation.amount),  
+          date: donation.createdAt
+        }));
+        setDonors(transformedDonors);
       } catch (error) {
         console.error('Error fetching donors:', error);
       }
-    
     }
     fetchDonors();
-  },[])
+  }, [])
 
-
-  // Sample donor data
-  const donors = [
-    { id: 1, name: 'Sarah Johnson', amount: 5000, date: '2024-12-01', message: 'Happy to support this amazing cause!' },
-    { id: 2, name: 'Michael Chen', amount: 2500, date: '2024-12-02', message: 'Keep up the great work!' },
-    { id: 3, name: 'Emily Rodriguez', amount: 1000, date: '2024-12-03', message: '' },
-    { id: 4, name: 'David Thompson', amount: 500, date: '2024-12-04', message: 'Proud to contribute!' },
-    { id: 5, name: 'Lisa Anderson', amount: 250, date: '2024-12-05', message: '' },
-    { id: 6, name: 'James Wilson', amount: 3000, date: '2024-12-05', message: 'For a better future!' },
-    { id: 7, name: 'Maria Garcia', amount: 750, date: '2024-12-06', message: 'Love what you do!' },
-    { id: 8, name: 'Robert Lee', amount: 150, date: '2024-12-07', message: '' },
-    { id: 9, name: 'Jennifer Kim', amount: 10000, date: '2024-11-28', message: 'Honored to be part of this journey!' },
-    { id: 10, name: 'Anonymous', amount: 500, date: '2024-12-08', message: '' },
-  ];
 
   // Calculate stats
-  const totalRaised = donors.reduce((sum, donor) => sum + donor.amount, 0);
+  const totalRaised = donors.reduce((sum, donor) => sum + Number(donor.amount), 0);
   const totalDonors = donors.length;
   const averageDonation = totalRaised / totalDonors;
 
-  // Filter and sort donors
-  const filteredAndSortedDonors = useMemo(() => {
-    let result = [...donors];
+const filteredAndSortedDonors = useMemo(() => {
+  if (!donors || donors.length === 0) return []; // check if donors exist
 
-    // Filter by search term
-    if (searchTerm) {
-      result = result.filter(donor =>
-        donor.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+  let result = [...donors];
+
+  // Filter by search term safely
+  if (searchTerm) {
+    result = result.filter(donor =>
+      donor.name?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }
+
+  // Sort safely
+  result.sort((a, b) => {
+    switch (sortBy) {
+      case 'amount-desc':
+        return (b.amount ?? 0) - (a.amount ?? 0);
+      case 'amount-asc':
+        return (a.amount ?? 0) - (b.amount ?? 0);
+      case 'date-desc':
+        return new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime();
+      case 'date-asc':
+        return new Date(a.date ?? 0).getTime() - new Date(b.date ?? 0).getTime();
+      case 'name':
+        return (a.name ?? "").localeCompare(b.name ?? "");
+      default:
+        return 0;
     }
+  });
 
-    // Sort
-    result.sort((a, b) => {
-      switch (sortBy) {
-        case 'amount-desc':
-          return b.amount - a.amount;
-        case 'amount-asc':
-          return a.amount - b.amount;
-        case 'date-desc':
-          return new Date(b.date).getTime() - new Date(a.date).getTime();
-        case 'date-asc':
-          return new Date(a.date).getTime() - new Date(b.date).getTime();
-        case 'name':
-          return a.name.localeCompare(b.name);
-        default:
-          return 0;
-      }
-    });
+  return result;
+}, [donors, searchTerm, sortBy]);
 
-    return result;
-  }, [donors, searchTerm, sortBy]);
 
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-50 p-6">
@@ -166,7 +184,7 @@ const DonorsPage = () => {
                       ${donor.amount.toLocaleString()}
                     </span>
                     <span>•</span>
-                    <span>{new Date(donor.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                    <span>{donor.createdAt}</span>
                   </div>
                   
                   {donor.message && (

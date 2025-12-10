@@ -1,13 +1,27 @@
 import {NextResponse,NextRequest} from "next/server";
 import Payment from "@/models/Payment";
 import dbConnect from "@/lib/dbConnect";
+export interface IPayment {
+  reference: string;
+  amount: number;
+  status: "success" | "failed" | "pending";
+  currency?: string;        
+  paymentMethod?: string;
+  cardLast4?: string;
+  name?: string;
+  email?: string;
+  message?: string;
+  createdAt?: Date;          
+  updatedAt?: Date;          
+}
+
 
 
 export async function GET(req:NextRequest){
 
     try{
         await dbConnect();
-       const donations = await Payment.find({}).sort({createdAt:-1});
+       const donations: IPayment[] = await Payment.find({}).sort({createdAt:-1});
        const totalDonations = await Payment.countDocuments();
 
 

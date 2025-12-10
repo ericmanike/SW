@@ -1,5 +1,6 @@
 'use client'
 import { useToast } from '@/components/toastProvider';
+import { useRouter } from 'next/navigation';
 
 declare global {
   interface Window {
@@ -7,12 +8,36 @@ declare global {
   }
 }
 
-import React, { useState } from 'react';
-import { Heart, TrendingUp, User, Mail, DollarSign, Phone, CheckCircle, Users } from 'lucide-react';
+
+
+
+export interface IPayment {
+  _id: string; 
+  id: string; 
+  date?: string;
+  reference: string;
+  amount: number;
+  status?: "success" | "failed" | "pending";
+  currency?: string;
+  paymentMethod?: string;
+  cardLast4?: string;
+  name?: string;
+  email?: string;
+  message?: string;
+  createdAt?: string; // timestamps are usually strings when sent as JSON
+  updatedAt?: string;
+}
+
+
+import React, { useState ,useEffect, use } from 'react';
+import { Heart, TrendingUp, User, Mail, DollarSign, Calendar, CheckCircle, Users, } from 'lucide-react';
 import Script from 'next/script';
 
 export default function DonateSupport() {
+  const [fetchdata, setFetchdata] = useState([]);
+  const [numOfdonors, setNumOfDonors] = useState<number>(0);
   const [donationAmount, setDonationAmount] = useState('');
+  const [exchangeRate, setExchangeRate] = useState<number | null>(12);
   const [customAmount, setCustomAmount] = useState('');
   const [formData, setFormData] = useState({
     fullName: '',
@@ -20,13 +45,79 @@ export default function DonateSupport() {
     phone: '',
     message: ''
   });
-  const [showSuccess, setShowSuccess] = useState(false);
-  const { showToast } = useToast();
 
-  const amountRaised = 0;
+  const { showToast } = useToast();
+  const router = useRouter();
+
+
+
+useEffect(() => {
+         async function fetchInitialData() {
+           try {
+             const response = await fetch('/api/paymentverify/balance');
+             const data = await response.json();
+             console.log('Initial data fetched:', data.donations);
+              setFetchdata(data.donations || []);
+              setNumOfDonors(data.totalDonations || 0);
+              
+
+           } catch (error) {
+             console.error('Error fetching initial data:', error);
+                    }  
+                  }  
+         fetchInitialData();
+}, []);
+
+
+function calculateTotalRaised(donations: IPayment[]) {
+    return donations.reduce((total, donation) => total + Number(donation?.amount),0);
+  }
+
+
+useEffect(() => {  async function fetchExchangeRate() {
+  try {
+    const saved = localStorage.getItem("usdToGhsRate");
+    const savedTime = localStorage.getItem("usdToGhsTime");
+
+    if (saved && savedTime && Date.now() - Number(savedTime) < 24 * 60 * 60 * 1000) {
+      console.log("Using cached rate:", saved);
+        setExchangeRate(Number(saved));
+        return;
+    }
+
+    const res = await fetch(
+      "https://v6.exchangerate-api.com/v6/92022bbda01955ebd077740b/latest/USD"
+    );
+    const data = await res.json();
+
+    const rate = data.conversion_rates.GHS;
+    console.log("Fetched fresh rate:", rate);
+    setExchangeRate(rate);  
+    localStorage.setItem("usdToGhsRate", rate.toString());
+    localStorage.setItem("usdToGhsTime", Date.now().toString());
+    return 
+
+  } catch (error) {
+    console.error("Error fetching exchange rate:", error);
+  }
+}
+
+fetchExchangeRate();
+
+
+
+    const total = calculateTotalRaised(fetchdata as IPayment[]);
+    console.log('Total amount raised:', total);
+  }     , [fetchdata]);
+
+
+
+
+
+  const amountRaised = calculateTotalRaised(fetchdata as IPayment[]);
   const targetAmount = 10000;
   const progressPercentage = (amountRaised / targetAmount) * 100;
-  const donors = 0;
+  const donors: number = numOfdonors;
   
 
   const predefinedAmounts = ['5', '10', '50', '100', '250', '1000'];
@@ -72,7 +163,8 @@ export default function DonateSupport() {
 
    const handleInlinePayment = () => {
     const { email } = formData;
-    const amount = donationAmount || customAmount;
+    const usdAmount = donationAmount ? donationAmount : customAmount;
+    const amount = exchangeRate && usdAmount ? (Number(usdAmount) * exchangeRate).toFixed(2) : null;
     if (!email || !amount) {
       showToast('Please fill in all fields', 'error');
       return;
@@ -81,7 +173,7 @@ export default function DonateSupport() {
     const handler = window.PaystackPop.setup({
       key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
       email: email,
-      amount: parseFloat(amount) * 100,
+      amount: Number(amount ) * 100 , 
       currency: 'GHS', // or 'NGN', 'USD', 'ZAR'
       ref: 'PS_' + Math.floor((Math.random() * 1000000000) + 1),
       onClose: function() {
@@ -107,7 +199,7 @@ export default function DonateSupport() {
             message: formData.message })
       });
       const data = await response.json();
-          console.log('Verification response data:', data);
+          console.log('Verification response data:', data.success);
       if (data.success) {
          showToast('Payment  successful!', 'success');
           sendMail( formData.email,
@@ -115,7 +207,7 @@ export default function DonateSupport() {
             `Dear ${formData.fullName},<br/><br/>Thank you for your generous donation of $${donationAmount || customAmount}. 
             Your support helps us provide clean water to communities 
             in need.<br/><br/>Best regards,<br/>Savannah Water Team`);  
-
+           window.location.reload();
 
         
       } else {
@@ -129,6 +221,14 @@ export default function DonateSupport() {
 
   return (
     <div className=" bg-linear-to-br from-gray-50 via-cyan-50 to-blue-50 min-h-screen">
+       
+       <Script
+        src="https://js.paystack.co/v1/inline.js"
+        strategy="afterInteractive"
+        onLoad={() => console.log("Paystack inline loaded")}
+      />
+
+
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-20 ">
         <div className="text-center mb-12">
@@ -181,7 +281,7 @@ export default function DonateSupport() {
                 <Users className="w-6 h-6 text-white" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-gray-900">{donors}</p>
+                <p className="text-2xl font-bold text-gray-900">{numOfdonors}</p>
                 <p className="text-sm text-gray-600">Donors</p>
               </div>
             </div>
@@ -195,6 +295,17 @@ export default function DonateSupport() {
                   ${(targetAmount - amountRaised).toLocaleString()}
                 </p>
                 <p className="text-sm text-gray-600">To Goal</p>
+              </div>
+            </div>
+
+
+            <div className="flex items-center space-x-4 p-4 bg-linear-to-br from-cyan-50 to-blue-50 rounded-xl">
+              <div className="w-12 h-12 bg-cyan-500 rounded-lg flex items-center justify-center">
+                <Calendar className="w-6 h-6 text-white" />   
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-gray-900">2025/2026</p> 
+                <p className="text-sm text-gray-600"></p>
               </div>
             </div>
 
@@ -311,21 +422,18 @@ export default function DonateSupport() {
                   />
                 </div>
               </div>
-
-             <Script
-  src="https://js.paystack.co/v1/inline.js"
-  strategy="afterInteractive"
-/>
+              <form id='paystackForm'>
+           
+            </form>
               <button
                 onClick={() => {
                   handleInlinePayment();
-                  handleDonationSubmit();
-                  
+                  handleDonationSubmit(); 
                 }}
                 className="cursor-pointer w-full py-4 bg-linear-to-r from-cyan-500 to-blue-600 text-white rounded-xl font-bold text-lg hover:shadow-xl transition focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 flex items-center justify-center space-x-2"
               >
-                <Heart className="w-5 h-5" />
-                <span>Donate ${donationAmount || customAmount || '0'}</span>
+               
+                <span>Give ${donationAmount || customAmount || '0'}</span>
               </button>
             </div>
           </div>

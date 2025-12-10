@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react';
 import {  Target, Users, Award, MapPin, Phone, Mail, Send, CheckCircle, Heart, Shield, Lightbulb } from 'lucide-react';
-import type { Metadata } from "next";
+import { useRouter } from 'next/navigation';
 
 export default function AboutPage() {
   const [contactForm, setContactForm] = useState({
@@ -10,7 +10,9 @@ export default function AboutPage() {
     subject: '',
     message: ''
   });
-  const [showSuccess, setShowSuccess] = useState(false);
+  
+
+  const router = useRouter();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setContactForm({
@@ -25,9 +27,7 @@ export default function AboutPage() {
       return;
     }
 
-    setShowSuccess(true);
     setTimeout(() => {
-      setShowSuccess(false);
       setContactForm({ name: '', email: '', subject: '', message: '' });
     }, 3000);
   };
@@ -35,18 +35,17 @@ export default function AboutPage() {
   const teamMembers = [
     {
       name: 'Mr. Eric Manike Haare',
-      role: 'Founder & CEO',
-      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80'
-    },
+      role: 'Founder',
+      image: '/eric.png'  },
     {
       name: 'Unknown',
       role: 'Operations Director',
-      image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80'
+      image: ''
     },
     {
       name: 'Unknown',
       role: 'Community Outreach',
-      image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&q=80'
+      image: ''
     },
  
   ];
@@ -150,11 +149,11 @@ export default function AboutPage() {
             <p className="text-xl text-gray-600">Dedicated professionals working to make a difference</p>
           </div>
 
-          <div className="grid md:grid-cols-3 border-2 gap-6">
+          <div className="grid md:grid-cols-3  gap-6">
             {teamMembers.map((member, index) => (
               <div key={index} className="bg-linear-to-br from-cyan-50 to-blue-50 rounded-xl p-4 text-center hover:shadow-xl transition">
                 <img 
-                  src={member.image} 
+                  src={member?.image || '/imagenotfound.png'} 
                   alt={member.name}
                   className="w-20 h-20 rounded-full mx-auto mb-3 object-cover border-3 border-white shadow-md"
                 />
