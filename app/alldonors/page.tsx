@@ -58,7 +58,7 @@ const DonorsPage = () => {
   // Calculate stats
   const totalRaised = donors.reduce((sum, donor) => sum + Number(donor.amount), 0);
   const totalDonors = donors.length;
-  const averageDonation = totalRaised / totalDonors;
+  const averageDonation = totalRaised ? totalRaised / totalDonors :0;
 
 const filteredAndSortedDonors = useMemo(() => {
   if (!donors || donors.length === 0) return []; // check if donors exist
