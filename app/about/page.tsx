@@ -14,23 +14,7 @@ export default function AboutPage() {
 
   const router = useRouter();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setContactForm({
-      ...contactForm,
-      [e.target.name]: e.target.value
-    });
-  };
 
-  const handleSubmit = () => {
-    if (!contactForm.name || !contactForm.email || !contactForm.message) {
-      alert('Please fill in all required fields');
-      return;
-    }
-
-    setTimeout(() => {
-      setContactForm({ name: '', email: '', subject: '', message: '' });
-    }, 3000);
-  };
 
   const teamMembers = [
     {
@@ -40,12 +24,12 @@ export default function AboutPage() {
     {
       name: 'Unknown',
       role: 'Operations Director',
-      image: ''
+      image: 'null'
     },
     {
       name: 'Unknown',
       role: 'Community Outreach',
-      image: ''
+      image: 'null'
     },
  
   ];
