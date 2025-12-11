@@ -76,7 +76,7 @@ export default function SavannahWater() {
                 </span>
               </h2>
               <p className="text-lg lg:text-xl text-gray-600 leading-relaxed max-w-xl">
-                Establishing pure water manufacturing plants to provide sustainable access to clean, safe drinking water across Northern Ghana's communities.
+                 Providing sustainable water access to underprivileged communities, and  water manufacturing plants as economic hubs.
               </p>
             </div>
             

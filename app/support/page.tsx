@@ -239,7 +239,8 @@ fetchExchangeRate();
             </span>
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Every donation brings us closer to establishing sustainable water manufacturing plants
+            Every donation brings us closer to providing sustainable water solutions
+           <br /> <span>Your $1 can make a difference</span>
           </p>
         </div>
 
@@ -438,6 +439,29 @@ fetchExchangeRate();
               </button>
             </div>
           </div>
+        <div className="space-y-8">
+
+            <div className="space-y-6">
+            <div className="bg-linear-to-br from-cyan-500 to-blue-600 rounded-3xl shadow-xl p-8 text-white">
+              <h4 className="text-2xl font-bold mb-4">Why this project Matters</h4>
+              <ul className="space-y-3">
+                <li className="flex items-start space-x-3">
+                  <CheckCircle className="w-6 h-6 shrink-0 mt-0.5" />
+                  <span>Unfulfilled Political Promises</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <CheckCircle className="w-6 h-6 shrink-0 mt-0.5" />
+                  <span>Marginalised  Communities  suffer to get access to portable water</span>
+                
+                </li>
+                <li className="flex items-start space-x-3">
+                  <CheckCircle className="w-6 h-6 shrink-0 mt-0.5" />
+                  <span>The unemployment gap, No reliable job opportunities</span>
+                </li>
+                
+              </ul>
+            </div>
+          </div>
 
           {/* Right: Impact Information */}
           <div className="space-y-6">
@@ -446,7 +470,11 @@ fetchExchangeRate();
               <ul className="space-y-3">
                 <li className="flex items-start space-x-3">
                   <CheckCircle className="w-6 h-6 shrink-0 mt-0.5" />
-                  <span>Building sustainable water manufacturing plants</span>
+                  <span>Providing water solutions  to marginalised communities</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <CheckCircle className="w-6 h-6 shrink-0 mt-0.5" />
+                  <span>Establishment of sustainable water manufacturing plants as economic hubs</span>
                 </li>
                 <li className="flex items-start space-x-3">
                   <CheckCircle className="w-6 h-6 shrink-0 mt-0.5" />
@@ -462,6 +490,8 @@ fetchExchangeRate();
                 </li>
               </ul>
             </div>
+          </div>
+
           </div>
         </div>
       </section>
