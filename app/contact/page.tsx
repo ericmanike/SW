@@ -29,7 +29,7 @@ export default function AboutPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          to: contactForm.email,
+          to: 'manikeeric@gmail.com',
           subject: contactForm.subject,
           message: `New message! from <b>${contactForm.name}</b><br/>
           <p>message: ${contactForm.message} </p>
@@ -39,9 +39,10 @@ export default function AboutPage() {
           throw new Error('Failed to send email');
         }
         else {
+            setShowSuccess(true);
       setTimeout(() => {
       setShowSuccess(false);
-    }, 2000);
+    }, 3000);
       const data = await response.json();
       
   }
@@ -62,7 +63,7 @@ export default function AboutPage() {
       return;
     }
     
-    setShowSuccess(true);
+  
     handleSendEmail();
     setContactForm({ name: '', email: '', subject: '', message: '' });
 
