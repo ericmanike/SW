@@ -202,7 +202,7 @@ const filteredAndSortedDonors = useMemo(() => {
 
         {filteredAndSortedDonors.length === 0 && (
           <div className="bg-white rounded-lg shadow-md p-12 text-center">
-            <p className="text-gray-500 text-lg">No donors found matching your search.</p>
+            <p className="text-gray-500 text-lg">No donors found matching your criteria.</p>
           </div>
         )}
       </div>
