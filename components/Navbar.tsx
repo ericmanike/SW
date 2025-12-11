@@ -53,7 +53,7 @@ function Navbar() {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-white border-t border-gray-200 shadow-lg">
+          <div className="md:hidden transition-all duration-150 bg-white border-t border-gray-200 shadow-lg">
             <nav className="px-4 py-6 space-y-4">
               <Link 
                 href="/" 
@@ -75,6 +75,13 @@ function Navbar() {
                 className="block text-gray-700 hover:text-cyan-600 font-medium transition py-2"
               >
                 About
+              </Link>
+              <Link
+                href="/contact"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-4    text-gray-700 hover:text-cyan-600 font-medium transition py-2"
+              >
+                Contact   <Phone/>
               </Link>
       
               <button 

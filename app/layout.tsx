@@ -36,7 +36,7 @@ export default function RootLayout({
       <Navbar/>
         {children}
         <div className='bg-linear-to-r from-cyan-500 to-blue-600 text-white py-10 w-full flex justify-center items-center'>
-       all rights reserved &copy; Savannah Water {new Date().getFullYear()}
+      &copy; Savannah Water {new Date().getFullYear()}   All rights reserved
 
 
       </div>

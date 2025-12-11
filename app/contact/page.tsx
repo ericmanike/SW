@@ -74,22 +74,21 @@ export default function AboutPage() {
 
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-  
+    <div className="min-w-full min-h-screen ">
       {/* Contact Form Section */}
-      <section className="mt-10 py-20 bg-linear-to-br from-gray-50 via-cyan-50 to-blue-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className=" min-w-full  mt-10 py-20 ">
+        <div className="max-w-full  w-full  mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Get In Touch</h2>
             <p className="text-xl text-gray-600">Have questions? We&apos;d love to hear from you</p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12">
+          <div className=" p-3 w-full flex flex-wrap md:grid md:grid-cols-2 gap-6 md:gap-12">
      
-             <div className="bg-white rounded-3xl shadow-xl p-8">
+             <div className="w-full  bg-white rounded-3xl shadow-xl p-4 md:p-8">
               <h3 className="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h3>
               
-              <div className="space-y-6">
+              <div className="md:space-y-6">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Your Name *
@@ -231,7 +230,7 @@ export default function AboutPage() {
 <div className=" md:block mt-8 px-3">
   <h3 className="text-2xl font-bold mb-4">Follow Us</h3>
 
-  <div className="flex space-x-6">
+  <div className="flex flex-wrap gap-3 space-x-6">
     <a
       href="https://facebook.com"
       target="_blank"

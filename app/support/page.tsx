@@ -232,7 +232,7 @@ fetchExchangeRate();
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-20 ">
         <div className="text-center mb-12">
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+          <h2 className="text-2xl md:text-5xl font-bold text-gray-900 mb-4">
             Support Clean Water for
             <span className="block mt-2 bg-linear-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent">
               Northern Ghana

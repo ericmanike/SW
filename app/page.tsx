@@ -69,7 +69,7 @@ export default function SavannahWater() {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8">
             <div className="space-y-4">
-              <h2 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+              <h2 className="text-3xl md:text-6xl font-bold text-gray-900 leading-tight">
                 Clean Water for
                 <span className="block mt-2 bg-linear-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent">
                   Northern Ghana
