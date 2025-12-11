@@ -360,6 +360,7 @@ fetchExchangeRate();
                   <input
                     type="number"
                     value={customAmount}
+                    min={1}
                     onChange={(e) => {
                       setCustomAmount(e.target.value);
                       setDonationAmount('');
