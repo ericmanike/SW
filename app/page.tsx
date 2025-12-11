@@ -97,15 +97,15 @@ export default function SavannahWater() {
             <div className="grid grid-cols-3 gap-6 pt-8 border-t border-gray-200">
               <div>
                 <p className="text-3xl font-bold text-cyan-600">50K+</p>
-                <p className="text-sm text-gray-600 mt-1">Lives Impacted</p>
+                <p className="text-sm text-gray-600 mt-1">Lives to be Impacted</p>
               </div>
               <div>
                 <p className="text-3xl font-bold text-cyan-600">10</p>
-                <p className="text-sm text-gray-600 mt-1">Communities</p>
+                <p className="text-sm text-gray-600 mt-1">Target Communities</p>
               </div>
               <div>
-                <p className="text-3xl font-bold text-cyan-600">5</p>
-                <p className="text-sm text-gray-600 mt-1">Plants Planned</p>
+                <p className="text-3xl font-bold text-cyan-600">0/5</p>
+                <p className="text-sm text-gray-600 mt-1">Plants Established</p>
               </div>
             </div>
           </div>

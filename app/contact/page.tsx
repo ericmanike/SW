@@ -35,8 +35,16 @@ export default function AboutPage() {
           <p>message: ${contactForm.message} </p>
           `
         })})
+        if (!response.ok) {
+          throw new Error('Failed to send email');
+        }
+        else {
+      setTimeout(() => {
+      setShowSuccess(false);
+    }, 2000);
       const data = await response.json();
-    console.log('Email send response:', data)
+      
+  }
     
     }
       
@@ -59,9 +67,6 @@ export default function AboutPage() {
     setContactForm({ name: '', email: '', subject: '', message: '' });
 
 
-    setTimeout(() => {
-      setShowSuccess(false);
-    }, 2000);
   }
 
 
