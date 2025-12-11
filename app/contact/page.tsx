@@ -76,7 +76,7 @@ export default function AboutPage() {
   return (
     <div className="min-w-full min-h-screen ">
       {/* Contact Form Section */}
-      <section className=" min-w-full  mt-10 py-20 ">
+      <section className=" min-w-full  mt-10 py-20 bg-linear-to-r from-cyan-500 to-blue-600 ">
         <div className="max-w-full  w-full  mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Get In Touch</h2>
