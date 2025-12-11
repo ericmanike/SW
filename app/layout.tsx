@@ -35,6 +35,11 @@ export default function RootLayout({
       <ToastProvider>
       <Navbar/>
         {children}
+        <div className=' py-10 w-full flex justify-center items-center'>
+       all rights reserved &copy; Savannah Water {new Date().getFullYear()}
+
+
+      </div>
        </ToastProvider>
       </body>
     </html>

@@ -101,7 +101,7 @@ export default function SavannahWater() {
               </div>
               <div>
                 <p className="text-3xl font-bold text-cyan-600">10</p>
-                <p className="text-sm text-gray-600 mt-1">Target Communities</p>
+                <p className="text-sm text-gray-600 mt-1">Targeted Communities </p>
               </div>
               <div>
                 <p className="text-3xl font-bold text-cyan-600">0/5</p>
@@ -178,6 +178,9 @@ export default function SavannahWater() {
           </div>
         </div>
       </section>
+
+
+      
     </div>
   );
 }
