@@ -4,6 +4,7 @@ import {  MapPin, Phone, Mail, Send, CheckCircle } from 'lucide-react';
 import { useToast } from '@/components/toastProvider';
 import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 
+
 export default function AboutPage() {
   const [contactForm, setContactForm] = useState({
     name: '',
@@ -56,6 +57,11 @@ export default function AboutPage() {
     setShowSuccess(true);
     handleSendEmail();
     setContactForm({ name: '', email: '', subject: '', message: '' });
+
+
+    setTimeout(() => {
+      setShowSuccess(false);
+    }, 2000);
   }
 
 
@@ -63,7 +69,7 @@ export default function AboutPage() {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-    
+  
       {/* Contact Form Section */}
       <section className="mt-10 py-20 bg-linear-to-br from-gray-50 via-cyan-50 to-blue-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
